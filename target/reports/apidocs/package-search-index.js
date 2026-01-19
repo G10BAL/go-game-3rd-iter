@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"edu.university.go.board"},{"l":"edu.university.go.client"},{"l":"edu.university.go.game"},{"l":"edu.university.go.javafx"},{"l":"edu.university.go.protocol"},{"l":"edu.university.go.scoring"},{"l":"edu.university.go.server"},{"l":"edu.university.go.validators"}];updateSearchResults();
