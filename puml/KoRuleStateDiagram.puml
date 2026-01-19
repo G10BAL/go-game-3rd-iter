@@ -1,0 +1,38 @@
+@startuml Go Game - State Diagram: Ko Rule
+
+[*] --> NoHistory: game starts\n/ previousBoard = null
+
+NoHistory --> NoHistory: isKoViolation()?\nresult: false\n(no history to check against)
+
+NoHistory --> WithHistory: First move made\n/ updateState(board)
+
+WithHistory --> WithHistory: Normal move\n/ updateState(board)\nsave new state
+
+WithHistory --> KoDetected: Move creates\nsame board state\nas immediately previous\n/ isKoViolation() returns true
+
+KoDetected --> WithHistory: Different move made\n/ updateState(board)
+
+note right of NoHistory
+  Game start
+  No previous board state saved
+  Cannot detect Ko yet
+end note
+
+note right of WithHistory
+  Game in progress
+  Previous board state is saved
+  Can detect Ko violations
+  
+  Each move:
+  1. Check if creates Ko
+  2. If valid, update state
+end note
+
+note right of KoDetected
+  Ko violation detected
+  Move is rejected
+  Game state unchanged
+  Player must make different move
+end note
+
+@enduml

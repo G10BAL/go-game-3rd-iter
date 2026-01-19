@@ -1,0 +1,82 @@
+@startuml Go Game - Sequence Diagram: Game Flow
+
+actor User
+participant MainApplication
+participant GameBoardCanvas
+participant EnhancedGameController
+participant Game
+participant Board
+participant KoRule
+participant ScoreCalculator
+
+User -> MainApplication: launch(args)\nboard size = NxN
+MainApplication -> EnhancedGameController: new EnhancedGameController(N, Komi)
+MainApplication -> Game: addPlayer("player-black")
+MainApplication -> Game: addPlayer("player-white")
+activate Game
+  Game -> Game: setState(InProgress)
+  Game -> GameBoardCanvas: notifyObservers(GAME_STARTED)
+deactivate Game
+
+MainApplication -> GameBoardCanvas: create UI
+MainApplication -> MainApplication: show()
+
+User -> GameBoardCanvas: click at (x, y)
+GameBoardCanvas -> EnhancedGameController: makeMove(x, y)
+activate EnhancedGameController
+  EnhancedGameController -> Board: getCapturedStones(Color, x, y)
+  activate Board
+    Board -> Board: placeStone temporarily at (x, y)
+    Board -> Board: check neighbors for captured stones
+    Board -> Board: restore position
+  deactivate Board
+
+  EnhancedGameController -> KoRule: isKoViolation(board, x, y, Color)
+  activate KoRule
+    KoRule -> Board: clone()
+    KoRule -> Board: placeStone()
+    KoRule -> Board: equals()
+  deactivate KoRule
+  
+  EnhancedGameController -> Game: makeMove(Move)
+  activate Game
+    Game -> Board: placeStone(Color, x, y)
+    activate Board
+      Board -> Board: remove captured enemy stones
+      Board -> Board: check suicide rule
+    deactivate Board
+    Game -> Game: switchTurn()
+    Game -> GameBoardCanvas: notifyObservers(MOVE_PLAYED)
+  deactivate Game
+  
+  EnhancedGameController -> KoRule: updateState(board)
+  EnhancedGameController -> GameBoardCanvas: notifyObservers(MOVE_PLAYED)
+deactivate EnhancedGameController
+
+GameBoardCanvas -> GameBoardCanvas: draw()
+
+User -> GameBoardCanvas: click at (x2, y2) [Oposite's turn]
+GameBoardCanvas -> EnhancedGameController: makeMove(x2, y2)
+EnhancedGameController -> Game: makeMove(Color, x2, y2)
+Game -> Board: placeStone(Color, x2, y2)
+Game -> Game: switchTurn()
+
+User -> GameBoardCanvas: click "Pass" button
+GameBoardCanvas -> EnhancedGameController: pass()
+EnhancedGameController -> Game: switchTurn()
+EnhancedGameController -> GameBoardCanvas: notifyObservers(MOVE_PLAYED)
+
+User -> GameBoardCanvas: click "Pass" button [second pass]
+GameBoardCanvas -> EnhancedGameController: pass()
+EnhancedGameController -> EnhancedGameController: endGame()
+EnhancedGameController -> ScoreCalculator: calculateScore(board, 0, 0)
+activate ScoreCalculator
+  ScoreCalculator -> Board: getTerritoryCounter
+  ScoreCalculator -> ScoreCalculator: Calculate black and white scores
+deactivate ScoreCalculator
+EnhancedGameController -> GameBoardCanvas: notifyObservers(GAME_ENDED)
+
+GameBoardCanvas -> GameBoardCanvas: onGameEvent(GAME_ENDED)
+GameBoardCanvas -> GameBoardCanvas: draw() final board state
+
+@enduml

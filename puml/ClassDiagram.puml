@@ -1,0 +1,451 @@
+@startuml Go Game - Class Diagram
+
+!define ABSTRACT abstract
+!define INTERFACE interface
+
+' Board Module
+package "edu.university.go.board" {
+    enum Color {
+        BLACK
+        WHITE
+        EMPTY
+        --
+        opposite(): Color
+    }
+    
+    class Point {
+        int x
+        int y
+        --
+        equals(Object): boolean
+        hashCode(): int
+    }
+    
+    class Stone {
+        Color color
+        --
+        getColor(): Color
+    }
+    
+    class Chain {
+        Color color
+        Set<Point> stones
+        --
+        add(Point): void
+        getStones(): Set<Point>
+        getColor(): Color
+        getLiberties(Board): Set<Point>
+        isCaptured(Board): boolean
+        size(): int
+    }
+    
+    class Board {
+        int size
+        Color[][] grid
+        --
+        getSize(): int
+        get(int, int): Color
+        isInside(int, int): boolean
+        neighbors(Point): List<Point>
+        getChain(Point): Chain
+        countLiberties(Chain): int
+        placeStone(Color, int, int): boolean
+        clone(): Board
+        equals(Object): boolean
+        hashCode(): int
+        getCapturedStones(Color, int, int): List<Point>
+        --
+        -removeChain(Chain): void
+        -dfs(Point, Color, Set<Point>, Chain): void
+    }
+}
+
+' Game State Module
+package "edu.university.go.game" {
+    INTERFACE GameState {
+        addPlayer(Game, String): void
+        makeMove(Game, Move): void
+    }
+    
+    class WaitingForPlayers {
+        Set<String> players
+        --
+        addPlayer(Game, String): void
+        makeMove(Game, Move): void
+    }
+    
+    class InProgress {
+        Set<String> players
+        --
+        addPlayer(Game, String): void
+        makeMove(Game, Move): void
+    }
+    
+    enum GameEvent {
+        GAME_STARTED
+        MOVE_PLAYED
+        INVALID_MOVE
+        GAME_ENDED
+    }
+    
+    INTERFACE GameObserver {
+        onGameEvent(GameEvent): void
+    }
+    
+    class Move {
+        Color color
+        int x
+        int y
+        String playerId
+        MoveType type
+        --
+        isPass(): boolean
+        isResign(): boolean
+        --
+        {static} pass(Color, String): Move
+        {static} resign(Color, String): Move
+    }
+    
+    enum MoveType {
+        PLACE_STONE
+        PASS
+        RESIGN
+    }
+    
+    class Game {
+        Board board
+        GameState state
+        Color currentTurn
+        List<GameObserver> observers
+        --
+        addPlayer(String): void
+        makeMove(Move): void
+        setState(GameState): void
+        switchTurn(): void
+        getCurrentTurn(): Color
+        getBoard(): Board
+        addObserver(GameObserver): void
+        notifyObservers(GameEvent): void
+    }
+    
+    class EnhancedGameController {
+        Game game
+        Board board
+        KoRule koValidator
+        ScoreCalculator scoreCalculator
+        int capturedByBlack
+        int capturedByWhite
+        int consecutivePasses
+        boolean gameEnded
+        String blackPlayerId
+        String whitePlayerId
+        List<GameObserver> observers
+        --
+        makeMove(int, int): boolean
+        pass(): void
+        resign(): void
+        getGameResult(): GameResult
+        getBoard(): Board
+        getGame(): Game
+        getCurrentTurn(): Color
+        getCapturedByBlack(): int
+        getCapturedByWhite(): int
+        isGameEnded(): boolean
+        addObserver(GameObserver): void
+        --
+        -endGame(): void
+        -notifyObservers(GameEvent): void
+    }
+}
+
+' Validators Module
+package "edu.university.go.validators" {
+    class KoRule {
+        Board previousBoard
+        --
+        isKoViolation(Board, int, int, Color): boolean
+        updateState(Board): void
+        reset(): void
+    }
+}
+
+' Scoring Module
+package "edu.university.go.scoring" {
+    class GameResult {
+        double blackScore
+        double whiteScore
+        Color winner
+        double margin
+        --
+        toString(): String
+    }
+    
+    class ScoreCalculator {
+        TerritoryCounter territoryCounter
+        double komi
+        --
+        calculateScore(Board, int, int): GameResult
+    }
+    
+    class TerritoryCounter {
+        --
+        calculateTerritory(Board): Map<Color, Integer>
+        -floodFill(Board, Point, Set<Point>): Territory
+        -determineOwner(Territory): Color
+    }
+    
+    class Territory {
+        Set<Point> points
+        Set<Color> borders
+        --
+        addPoint(Point): void
+        addBorder(Color): void
+        getPoints(): Set<Point>
+        getBorders(): Set<Color>
+    }
+}
+
+' JavaFX UI Module
+package "edu.university.go.javafx" {
+
+    class ClientApplication {
+        Client client
+        EnhancedGameController controller
+        GameBoardCanvas boardCanvas
+        NetworkInfoPanel infoPanel
+        int boardSize
+        Color myColor
+        --
+        start(Stage): void
+        sendMoveToServer(int,int): void
+        sendPassToServer(): void
+        sendResignToServer(): void
+    }
+
+    class NetworkInfoPanel {
+        Label connectionStatusLabel
+        Label colorLabel
+        Label currentPlayerLabel
+        Label capturedBlackLabel
+        Label capturedWhiteLabel
+        Button passButton
+        Button resignButton
+        --
+        updateConnectionStatus(String, boolean): void
+        updateConnectedAs(String): void
+        updateColorAssigned(Color): void
+        updateCapturedStones(int,int): void
+        updateCurrentTurn(Color): void
+        enableGameControls(): void
+        disableGameControls(): void
+    }
+    
+    class GameBoardCanvas {
+        int CANVAS_SIZE
+        int MARGIN
+        EnhancedGameController controller
+        Board board
+        double cellSize
+        --
+        handleClick(MouseEvent): void
+        draw(): void
+        drawStone(GraphicsContext, int, int, Color): void
+        pixelToPoint(double, double): Point
+        onGameEvent(GameEvent): void
+    }
+    
+    class InfoPanel {
+        EnhancedGameController controller
+        Label currentPlayerLabel
+        Label capturedBlackLabel
+        Label capturedWhiteLabel
+        Button passButton
+        Button resignButton
+        Label resultLabel
+        --
+        updateCurrentPlayer(): void
+        updateCapturedStones(): void
+        showResult(): void
+        onGameEvent(GameEvent): void
+    }
+}
+
+' Protocol Module
+package "edu.university.go.protocol" {
+    enum CommandType {
+        JOIN
+        MOVE
+        QUIT
+        UNKNOWN
+    }
+    
+    enum ResponseStatus {
+        OK
+        ERROR
+    }
+    
+    class Command {
+        CommandType type
+        String[] args
+        --
+        getType(): CommandType
+        getArgs(): String[]
+    }
+    
+    class ServerResponse {
+        ResponseStatus status
+        String message
+        --
+        getStatus(): ResponseStatus
+        getMessage(): String
+        serialize(): String
+        {static} ok(String): ServerResponse
+        {static} error(String): ServerResponse
+    }
+    
+    class Move {
+        int x
+        int y
+        --
+        x(): int
+        y(): int
+    }
+}
+
+' Server Module
+package "edu.university.go.server" {
+    class Server {
+        int port
+        GameSession session
+        --
+        {static} getInstance(): Server
+        start(): void
+        --
+        -{static} Server instance
+    }
+    
+    class GameSession {
+        Game game
+        Map<String, ClientHandler> players
+        --
+        addPlayer(String, ClientHandler): void
+        handleMove(Move): void
+        sendBoard(String): void
+        onGameEvent(GameEvent): void
+        -broadcast(String): void
+    }
+    
+    class ClientHandler {
+        Socket socket
+        GameSession session
+        String playerId
+        PrintWriter out
+        BufferedReader in
+        --
+        run(): void
+        handleCommand(String): void
+        send(String): void
+    }
+    
+    class CommandParser {
+        {static} parse(String): Command
+    }
+    
+    class GameFactory {
+        {static} createGame(int): Game
+    }
+    
+    class ServerMain {
+        {static} main(String[]): void
+    }
+}
+
+' Client Module
+package "edu.university.go.client" {
+    class Client {
+        String host
+        int port
+        Socket socket
+        BufferedReader in
+        PrintWriter out
+        --
+        connect(): void
+        send(String): void
+        receive(): String
+        close(): void
+    }
+    
+    class ConsoleUI {
+        Client client
+        BufferedReader console
+        AtomicReference<String> assignedColor
+        --
+        start(): void
+    }
+    
+    class ClientMain {
+        {static} main(String[]): void
+    }
+}
+
+' Relationships
+Color "1" *-- "many" Point
+Board "1" *-- "many" Stone
+Board o-- "many" Chain
+Chain "1" -- "many" Point
+
+GameState <|.. WaitingForPlayers
+GameState <|.. InProgress
+
+Game "1" -- "1" Board
+Game "1" -- "1" GameState
+Game o-- "many" GameObserver
+
+Move "1" -- "1" Color
+Move "1" -- "1" MoveType
+
+EnhancedGameController "1" -- "1" Game
+EnhancedGameController "1" -- "1" Board
+EnhancedGameController "1" -- "1" KoRule
+EnhancedGameController "1" -- "1" ScoreCalculator
+EnhancedGameController o-- "many" GameObserver
+
+GameResult "1" -- "1" Color
+
+ScoreCalculator "1" -- "1" TerritoryCounter
+
+TerritoryCounter "1" -- "many" Territory
+
+' MainApplication relationships removed
+
+GameBoardCanvas "1" -- "1" EnhancedGameController
+GameBoardCanvas "1" -- "1" Board
+GameBoardCanvas ..|> GameObserver
+
+InfoPanel "1" -- "1" EnhancedGameController
+InfoPanel "1" -- "1" GameResult
+InfoPanel ..|> GameObserver
+
+CommandType "1" -- "1" Command
+ResponseStatus "1" -- "1" ServerResponse
+
+Server "1" -- "1" GameSession
+
+GameSession "1" -- "1" Game
+GameSession "many" -- "many" ClientHandler
+GameSession ..|> GameObserver
+
+ClientHandler "1" -- "1" GameSession
+
+CommandParser -- Command
+
+GameFactory -- Game
+
+Client -- ConsoleUI
+
+ClientApplication "1" -- "1" Client
+ClientApplication "1" -- "1" NetworkInfoPanel
+ClientApplication "1" -- "1" EnhancedGameController
+NetworkInfoPanel "1" -- "1" ClientApplication
+
+@enduml

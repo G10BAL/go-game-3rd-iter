@@ -1,0 +1,8 @@
+edu.university.go.board
+edu.university.go.client
+edu.university.go.game
+edu.university.go.javafx
+edu.university.go.protocol
+edu.university.go.scoring
+edu.university.go.server
+edu.university.go.validators

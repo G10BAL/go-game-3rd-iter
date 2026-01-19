@@ -1,0 +1,9 @@
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/board/BoardTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/game/GameObserverTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/game/GameStateTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/protocol/ServerResponseTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/scoring/ScoreCalculatorTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/scoring/TerritoryCounterTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/server/ClientHandlerTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/server/GameSessionTest.java
+/home/gl0bal/softeng/lab5/src/test/java/edu/university/go/validators/KoRuleTest.java

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.17.0" timestamp="2026-01-18T14:16:14.393">
+<file name="/home/gl0bal/softeng/lab5/src/main/java/edu/university/go/game/EnhancedGameController.java">
+<violation beginline="129" endline="129" begincolumn="15" endcolumn="21" rule="UnusedLocalVariable" ruleset="Best Practices" package="edu.university.go.game" class="EnhancedGameController" method="resign" variable="winner" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'winner'.
+</violation>
+</file>
+<file name="/home/gl0bal/softeng/lab5/src/main/java/edu/university/go/javafx/ClientApplication.java">
+<violation beginline="259" endline="303" begincolumn="9" endcolumn="10" rule="EmptyControlStatement" ruleset="Code Style" package="edu.university.go.javafx" class="ClientApplication" method="handleServerEvent" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#emptycontrolstatement" priority="3">
+Empty if statement
+</violation>
+<violation beginline="261" endline="303" begincolumn="16" endcolumn="10" rule="EmptyControlStatement" ruleset="Code Style" package="edu.university.go.javafx" class="ClientApplication" method="handleServerEvent" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#emptycontrolstatement" priority="3">
+Empty if statement
+</violation>
+<violation beginline="289" endline="303" begincolumn="16" endcolumn="10" rule="EmptyControlStatement" ruleset="Code Style" package="edu.university.go.javafx" class="ClientApplication" method="handleServerEvent" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#emptycontrolstatement" priority="3">
+Empty if statement
+</violation>
+</file>
+<file name="/home/gl0bal/softeng/lab5/src/main/java/edu/university/go/server/GameSession.java">
+<violation beginline="20" endline="20" begincolumn="43" endcolumn="56" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.university.go.server" class="GameSession" variable="previousBoard" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'previousBoard'.
+</violation>
+<violation beginline="47" endline="47" begincolumn="13" endcolumn="20" rule="UnnecessaryReturn" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="addPlayer" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#unnecessaryreturn" priority="3">
+Unnecessary return statement
+</violation>
+<violation beginline="137" endline="137" begincolumn="31" endcolumn="73" rule="UselessParentheses" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="onGameEvent" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+Useless parentheses around `game.getWhitePlacedStones() - countWhite`.
+</violation>
+<violation beginline="138" endline="138" begincolumn="31" endcolumn="73" rule="UselessParentheses" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="onGameEvent" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+Useless parentheses around `game.getBlackPlacedStones() - countBlack`.
+</violation>
+<violation beginline="156" endline="156" begincolumn="31" endcolumn="73" rule="UselessParentheses" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="onGameEvent" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+Useless parentheses around `game.getWhitePlacedStones() - countWhite`.
+</violation>
+<violation beginline="157" endline="157" begincolumn="31" endcolumn="73" rule="UselessParentheses" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="onGameEvent" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#uselessparentheses" priority="4">
+Useless parentheses around `game.getBlackPlacedStones() - countBlack`.
+</violation>
+<violation beginline="205" endline="205" begincolumn="17" endcolumn="46" rule="UnnecessaryFullyQualifiedName" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="sendBoard" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname" priority="4">
+Unnecessary qualifier 'edu.university.go.board': 'Color' is already in scope because it is imported in this file
+</violation>
+<violation beginline="207" endline="207" begincolumn="26" endcolumn="55" rule="UnnecessaryFullyQualifiedName" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="sendBoard" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname" priority="4">
+Unnecessary qualifier 'edu.university.go.board': 'Color' is already in scope because it is imported in this file
+</violation>
+<violation beginline="208" endline="208" begincolumn="31" endcolumn="60" rule="UnnecessaryFullyQualifiedName" ruleset="Code Style" package="edu.university.go.server" class="GameSession" method="sendBoard" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname" priority="4">
+Unnecessary qualifier 'edu.university.go.board': 'Color' is already in scope because it is imported in this file
+</violation>
+</file>
+<file name="/home/gl0bal/softeng/lab5/src/main/java/edu/university/go/server/Server.java">
+<violation beginline="14" endline="14" begincolumn="23" endcolumn="32" rule="UnusedPrivateField" ruleset="Best Practices" package="edu.university.go.server" class="Server" variable="boardSize" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_bestpractices.html#unusedprivatefield" priority="3">
+Avoid unused private fields such as 'boardSize'.
+</violation>
+</file>
+</pmd>

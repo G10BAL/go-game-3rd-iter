@@ -1,0 +1,63 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-classpath
+'/home/gl0bal/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1.jar:/home/gl0bal/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1-linux.jar:/home/gl0bal/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1.jar:/home/gl0bal/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1-linux.jar:/home/gl0bal/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1.jar:/home/gl0bal/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1-linux.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'/home/gl0bal/softeng/lab5/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2026. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/gl0bal/softeng/lab5/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'go-game 0.1.0 API'
+-use
+-version
+-windowtitle
+'go-game 0.1.0 API'
+edu.university.go.protocol
+edu.university.go.game
+edu.university.go.javafx
+edu.university.go.board
+edu.university.go.server
+edu.university.go.client
+edu.university.go.scoring
+edu.university.go.validators
+/home/gl0bal/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1.jar = 1697565369000
+/home/gl0bal/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1-linux.jar = 1697565375000
+/home/gl0bal/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1.jar = 1697565424000
+/home/gl0bal/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1-linux.jar = 1697565460000
+/home/gl0bal/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1.jar = 1697565344000
+/home/gl0bal/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1-linux.jar = 1697565344000
+/home/gl0bal/softeng/lab5/src/main/java = 1768231116746
+/home/gl0bal/softeng/lab5/target/reports/apidocs/stylesheet.css = 1768474655937
+/home/gl0bal/softeng/lab5/target/reports/apidocs/element-list = 1768474655699
+/home/gl0bal/softeng/lab5/target/reports/apidocs/overview-summary.html = 1768474655932
+/home/gl0bal/softeng/lab5/target/reports/apidocs/package-search-index.js = 1768474655893
+/home/gl0bal/softeng/lab5/target/reports/apidocs/help-doc.html = 1768474655936
+/home/gl0bal/softeng/lab5/target/reports/apidocs/search-page.js = 1768474655941
+/home/gl0bal/softeng/lab5/target/reports/apidocs/script.js = 1768474655938
+/home/gl0bal/softeng/lab5/target/reports/apidocs/search.html = 1768474655931
+/home/gl0bal/softeng/lab5/target/reports/apidocs/overview-tree.html = 1768474655860
+/home/gl0bal/softeng/lab5/target/reports/apidocs/copy.svg = 1768474655938
+/home/gl0bal/softeng/lab5/target/reports/apidocs/module-search-index.js = 1768474655893
+/home/gl0bal/softeng/lab5/target/reports/apidocs/index-all.html = 1768474655929
+/home/gl0bal/softeng/lab5/target/reports/apidocs/type-search-index.js = 1768474655893
+/home/gl0bal/softeng/lab5/target/reports/apidocs/tag-search-index.js = 1768474655894
+/home/gl0bal/softeng/lab5/target/reports/apidocs/member-search-index.js = 1768474655894
+/home/gl0bal/softeng/lab5/target/reports/apidocs/link.svg = 1768474655939
+/home/gl0bal/softeng/lab5/target/reports/apidocs/allpackages-index.html = 1768474655892
+/home/gl0bal/softeng/lab5/target/reports/apidocs/search.js = 1768474655940
+/home/gl0bal/softeng/lab5/target/reports/apidocs/allclasses-index.html = 1768474655889
+/home/gl0bal/softeng/lab5/target/reports/apidocs/index.html = 1768474655864

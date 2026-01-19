@@ -1,0 +1,95 @@
+@startuml Client-Server Focused - Go Game
+title Client-Server Focused Class Diagram
+
+' Focused on networked interaction and server responsibilities
+package "edu.university.go.server" {
+  class Server {
+    -int port
+    -GameSession session
+    --
+    +start(): void
+  }
+
+  class GameSession {
+    -Game game
+    -Map<String, ClientHandler> players
+    --
+    +addPlayer(String, ClientHandler): void
+    +handleMove(Move): void
+    +handlePass(String): void
+    +handleResign(String): void
+    +sendBoard(String): void
+  }
+
+  class ClientHandler {
+    -Socket socket
+    -GameSession session
+    -String playerId
+    --
+    +run(): void
+    +handleCommand(String): void
+    +send(String): void
+  }
+}
+
+package "edu.university.go.client" {
+  class Client {
+    -String host
+    -int port
+    -Socket socket
+    --
+    +connect(): void
+    +send(String): void
+    +receiveAsync(Consumer<String>): void
+  }
+
+  class ConsoleUI {
+    -Client client
+    --
+    +start(): void
+  }
+}
+
+package "edu.university.go.javafx" {
+  class ClientApplication {
+    -Client client
+    -EnhancedGameController controller
+    -NetworkInfoPanel infoPanel
+    -int boardSize
+    --
+    +start(Stage): void
+    +sendMoveToServer(int,int): void
+    +sendPassToServer(): void
+    +sendResignToServer(): void
+  }
+
+  class NetworkInfoPanel {
+    -- UI fields --
+    +updateConnectionStatus(String,boolean): void
+    +updateConnectedAs(String): void
+    +updateColorAssigned(Color): void
+    +updateCapturedStones(int,int): void
+    +enableGameControls(): void
+    +disableGameControls(): void
+  }
+}
+
+' Core domain classes (simplified references)
+package "edu.university.go.game" {
+  class Game
+  class Move
+}
+
+ClientApplication "1" -- "1" Client : uses
+ClientApplication "1" -- "1" NetworkInfoPanel : contains
+ClientApplication "1" -- "1" Game : views
+
+GameSession "1" -- "many" ClientHandler : manages
+GameSession "1" -- "1" Game : contains
+ClientHandler "1" -- "1" ClientSession : interacts
+
+Client "1" <-- ConsoleUI : uses
+
+note "This view emphasises runtime interaction: clients <-> server (GameSession) and handlers." as N1
+
+@enduml

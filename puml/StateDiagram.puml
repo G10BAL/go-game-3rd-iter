@@ -1,0 +1,53 @@
+@startuml Go Game - State Diagram: Game States
+
+[*] --> WaitingForPlayers
+
+WaitingForPlayers --> WaitingForPlayers: addPlayer(playerId)\nplayers < 2\n/ store player
+
+WaitingForPlayers --> InProgress: addPlayer(playerId)\nplayers == 2\n/ notify GAME_STARTED
+
+InProgress --> InProgress: makeMove(move)\nmove is valid\n/ place stone, capture enemy,\nswitchTurn(), notify MOVE_PLAYED
+
+InProgress --> InProgress: makeMove(move)\nmove is invalid\n/ notify INVALID_MOVE
+
+InProgress --> GameEnded: pass() called twice\n/ notify GAME_ENDED
+
+InProgress --> GameEnded: resign() called\n/ notify GAME_ENDED
+
+GameEnded --> [*]: calculateScore()
+
+note right of WaitingForPlayers
+  Waiting for two players
+  to join the game
+  
+  Players are stored in a Set
+  Game cannot start until
+  exactly 2 players are added
+end note
+
+note right of InProgress
+  Game is in progress
+  Black and White take turns
+  
+  Valid moves:
+  - placeStone(color, x, y)
+  - pass()
+  - resign()
+  
+  Game ends when:
+  - 2 consecutive passes
+  - A player resigns
+end note
+
+note right of GameEnded
+  Game has ended
+  Final score is calculated
+  
+  Territory is counted
+  Captured stones are added
+  Komi is applied to White
+  
+  Winner is determined
+end note
+
+@enduml
