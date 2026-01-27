@@ -151,26 +151,40 @@ public class GameService {
                     int x = moveEntity.getX();
                     int y = moveEntity.getY();
                     
-                    List<Point> capturedStones = board.getCapturedStones(color, x, y);
+                    // Count stones BEFORE placing the new stone
+                    int whiteStonesBeforeMove = countStonesOnBoard(board, Color.WHITE);
+                    int blackStonesBeforeMove = countStonesOnBoard(board, Color.BLACK);
                     
-                    if (!capturedStones.isEmpty()) {
-                        if (color == Color.BLACK) {
-                            result.capturedByBlack += capturedStones.size();
-                            System.out.println("[GameService] Move #" + moveEntity.getTurnNumber() + 
-                                             ": BLACK captured " + capturedStones.size() + " white stones");
-                        } else {
-                            result.capturedByWhite += capturedStones.size();
-                            System.out.println("[GameService] Move #" + moveEntity.getTurnNumber() + 
-                                             ": WHITE captured " + capturedStones.size() + " black stones");
-                        }
-                    }
-                    
-                    // Turn
+                    // Place stone (this will automatically capture enemy stones)
                     boolean placed = board.placeStone(color, x, y);
                     
                     if (!placed) {
                         System.err.println("[GameService] Failed to place stone at move #" + 
                                          moveEntity.getTurnNumber() + " (suicide or occupied)");
+                        continue;
+                    }
+                    
+                    // Count stones AFTER placing the new stone
+                    int whiteStonesAfterMove = countStonesOnBoard(board, Color.WHITE);
+                    int blackStonesAfterMove = countStonesOnBoard(board, Color.BLACK);
+                    
+                    // Calculate captured stones based on the difference
+                    if (color == Color.BLACK) {
+                        // Black placed a stone, check if white stones were captured
+                        int whiteStonesCaptured = whiteStonesBeforeMove - whiteStonesAfterMove;
+                        if (whiteStonesCaptured > 0) {
+                            result.capturedByBlack += whiteStonesCaptured;
+                            System.out.println("[GameService] Move #" + moveEntity.getTurnNumber() + 
+                                             ": BLACK captured " + whiteStonesCaptured + " white stones");
+                        }
+                    } else {
+                        // White placed a stone, check if black stones were captured
+                        int blackStonesCaptured = blackStonesBeforeMove - blackStonesAfterMove;
+                        if (blackStonesCaptured > 0) {
+                            result.capturedByWhite += blackStonesCaptured;
+                            System.out.println("[GameService] Move #" + moveEntity.getTurnNumber() + 
+                                             ": WHITE captured " + blackStonesCaptured + " black stones");
+                        }
                     }
                 }
                 
@@ -185,6 +199,21 @@ public class GameService {
                          ", White: " + result.capturedByWhite);
         
         return result;
+    }
+    
+    /**
+     * Count stones of a specific color on the board
+     */
+    private int countStonesOnBoard(Board board, Color color) {
+        int count = 0;
+        for (int x = 0; x < board.getSize(); x++) {
+            for (int y = 0; y < board.getSize(); y++) {
+                if (board.get(x, y) == color) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
     
     @Transactional(readOnly = true)

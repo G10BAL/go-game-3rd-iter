@@ -140,9 +140,10 @@ class GameSession implements GameObserver {
       
       if (isRestored && handler != null) {
         System.out.println("[GameSession] Sending restored state to " + playerId);
-        sendBoard(playerId);
+        // Send game state before board so client updates UI in correct order
         handler.send("CAPTURED " + capturedByBlack + " " + capturedByWhite);
         handler.send("TURN " + game.getCurrentTurn());
+        sendBoard(playerId);
         
         if ("FINISHED".equals(gameEntity.getStatus())) {
           String scoreMsg = String.format(
@@ -282,12 +283,15 @@ class GameSession implements GameObserver {
         capturedByWhite = (game.getBlackPlacedStones() - countBlack) + game.getBlackPassStones();
       }
 
+      // Send CAPTURED and TURN before the board so the client UI updates in correct order
+      broadcast("CAPTURED " + capturedByBlack + " " + capturedByWhite);
+      broadcast("TURN " + game.getCurrentTurn());
+
+      // Now send the board state
       for (String pid : players.keySet()) {
         sendBoard(pid);
       }
 
-      broadcast("CAPTURED " + capturedByBlack + " " + capturedByWhite);
-      broadcast("TURN " + game.getCurrentTurn());
       broadcast("EVENT " + event);
       
       if (event == GameEvent.MOVE_PLAYED) {
@@ -295,30 +299,39 @@ class GameSession implements GameObserver {
       }
       
     } else if (event == GameEvent.GAME_ENDED) {
-      int countBlack = countStones(Color.BLACK);
-      int countWhite = countStones(Color.WHITE);
-      capturedByBlack = (game.getWhitePlacedStones() - countWhite) + game.getWhitePassStones();
-      capturedByWhite = (game.getBlackPlacedStones() - countBlack) + game.getBlackPassStones();
+      // Only recalculate captured stones for non-restored games
+      // For restored games, we already have the correct values from the incremental tracking during replay
+      if (!isRestored) {
+        int countBlack = countStones(Color.BLACK);
+        int countWhite = countStones(Color.WHITE);
+        capturedByBlack = (game.getWhitePlacedStones() - countWhite) + game.getWhitePassStones();
+        capturedByWhite = (game.getBlackPlacedStones() - countBlack) + game.getBlackPassStones();
+      }
 
       System.out.println("[GameSession] Game ended");
+      System.out.println("[GameSession] Final captured stones - Black: " + capturedByBlack + 
+                        ", White: " + capturedByWhite);
 
       GameResult result =
           scoreCalculator.calculateScore(game.getBoard(), capturedByBlack, capturedByWhite);
       System.out.println("[GameSession] Final result: " + result);
 
-      for (String pid : players.keySet()) {
-        sendBoard(pid);
-      }
-
+      // Send game state info before the board
       broadcast("CAPTURED " + capturedByBlack + " " + capturedByWhite);
       broadcast("TURN " + game.getCurrentTurn());
-
+      
       String scoreMsg =
           String.format(
               "RESULT %s %.1f %.1f %.1f",
               result.winner(), result.blackScore(), result.whiteScore(), result.margin());
       System.out.println("[GameSession] Sending score: " + scoreMsg);
       broadcast(scoreMsg);
+
+      // Now send the final board state
+      for (String pid : players.keySet()) {
+        sendBoard(pid);
+      }
+
       broadcast("EVENT " + event);
       
       if (gameEntity != null && gameService != null) {
