@@ -4,16 +4,8 @@ This is the second iteration of the Go-Game project. In this version, the UI imp
 
 ## How to Run
 
-### Hot Spot
-Now game works in a hot-spot mode, so we have one board and players on one PC make turns one by one
-This one will run 19x19 board with Komi = 7.5
-```
-mvn exec:java -Dexec.mainClass="edu.university.go.javafx.MainApplication"
-```
-
 ### Client-Server
-Also server-client mode
-
+The game works in a client-server mode.
 #### Server
 ```
 mvn exec:java -Dexec.mainClass="edu.university.go.server.ServerMain" -Dexec.args="{port} {size}"
@@ -22,6 +14,17 @@ mvn exec:java -Dexec.mainClass="edu.university.go.server.ServerMain" -Dexec.args
 #### Client
 ```
 mvn javafx:run
+```
+
+#### BOT
+Bot also can be added instead of one of the players
+To run bot:
+```
+mvn exec:java -Dexec.mainClass="edu.university.go.client.BotClient"
+```
+Or with optional parameters:
+```
+mvn exec:java -Dexec.mainClass="edu.university.go.client.BotClient" -Dexec.args="{host} {port}"
 ```
 
 ## Documentation

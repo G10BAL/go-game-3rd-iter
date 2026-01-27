@@ -75,13 +75,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>edu.university.go.server.ServerMain</mainClass>
+                    <mainClass>edu.university.go.GoApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version> <!-- Or your version -->
+                <version>3.13.0</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
