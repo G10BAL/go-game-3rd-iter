@@ -23,9 +23,3 @@ public record Move(Color color, int x, int y, String playerId, MoveType type) {
     return type == MoveType.RESIGN;
   }
 }
-
-enum MoveType {
-  PLACE_STONE,
-  PASS,
-  RESIGN
-}
