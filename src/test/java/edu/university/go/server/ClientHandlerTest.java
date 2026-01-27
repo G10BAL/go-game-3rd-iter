@@ -18,13 +18,12 @@ class ClientHandlerTest {
   }
 
   static class FakeSession extends GameSession {
-
     boolean errorSent = false;
-
+    
     FakeSession() {
-      super();
+      super(GameFactory.createGame(19));
     }
-
+    
     @Override
     void handleMove(Move move) {
       errorSent = true;
