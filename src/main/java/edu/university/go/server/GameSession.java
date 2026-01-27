@@ -195,6 +195,7 @@ class GameSession implements GameObserver {
         handler.send("ERROR: " + e.getMessage());
       }
     }
+    broadcast("CAPTURED " + capturedByBlack + " " + capturedByWhite);
   }
   
   private void saveMoveToDatabase(Move move, MoveType moveType) {
@@ -250,6 +251,7 @@ class GameSession implements GameObserver {
             .start();
       }
     }
+    broadcast("CAPTURED " + capturedByBlack + " " + capturedByWhite);
   }
 
   void handleResign(String playerId) {
