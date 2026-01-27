@@ -1,4 +1,4 @@
-# Go-Game - Iteration 2
+# Go-Game - Iteration 3
 
 This is the second iteration of the Go-Game project. In this version, the UI implemented with JavaFX and board size is a parametr
 
@@ -7,8 +7,19 @@ This is the second iteration of the Go-Game project. In this version, the UI imp
 ### Client-Server
 The game works in a client-server mode.
 #### Server
+
+Creating new Game
 ```
-mvn exec:java -Dexec.mainClass="edu.university.go.server.ServerMain" -Dexec.args="{port} {size}"
+mvn spring-boot:run
+```
+
+Restoring last game
+```
+mvn spring-boot:run -Dspring-boot.run.arguments="--restore-last 9999"
+```
+Or restoring game by its` ID
+```
+mvn spring-boot:run -Dspring-boot.run.arguments="--restore <game_id> [port]"
 ```
 
 #### Client
