@@ -116,6 +116,18 @@ class GameSession implements GameObserver {
     String assigned = color == Color.BLACK ? "BLACK" : "WHITE";
     playerColors.put(playerId, color);
     
+    if (gameEntity != null && gameService != null && !isRestored) {
+        if (color == Color.BLACK) {
+            gameEntity.setBlackType(playerType);
+        } else {
+            gameEntity.setWhiteType(playerType);
+        }
+        
+        gameService.updatePlayerTypes(gameEntity.getId(), 
+                                      gameEntity.getBlackType(), 
+                                      gameEntity.getWhiteType());
+    }
+
     if (handler != null) {
       System.out.println("[GameSession] Sending COLOR " + assigned + " to player " + playerId);
       handler.send("COLOR " + assigned);

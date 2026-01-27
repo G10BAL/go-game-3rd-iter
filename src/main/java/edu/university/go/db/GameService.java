@@ -2,7 +2,6 @@ package edu.university.go.db;
 
 import edu.university.go.board.Board;
 import edu.university.go.board.Color;
-import edu.university.go.board.Point;
 import edu.university.go.game.Game;
 import edu.university.go.game.Move;
 import edu.university.go.game.MoveType;
@@ -264,5 +263,15 @@ public class GameService {
         System.out.println("Total games: " + games.size());
         System.out.println("Active games: " + activeGames);
         System.out.println("Finished games: " + finishedGames);
+    }
+    @Transactional
+    public void updatePlayerTypes(Long gameId, PlayerType blackType, PlayerType whiteType) {
+        GameEntity game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new IllegalArgumentException("Game not found"));
+        
+        game.setBlackType(blackType);
+        game.setWhiteType(whiteType);
+        
+        gameRepository.save(game);
     }
 }
