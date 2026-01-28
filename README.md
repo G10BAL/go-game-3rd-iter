@@ -38,6 +38,12 @@ Or with optional parameters:
 mvn exec:java -Dexec.mainClass="edu.university.go.client.BotClient" -Dexec.args="{host} {port}"
 ```
 
+## Viewing games
+You can run an app to replay games from DB
+To run:
+```
+mvn exec:java  -Dexec.mainClass=edu.university.go.GameViewerMain  -Dexec.args="--go.mode=viewer"
+```
 ## Documentation
 
 Documentation is generated with JavaDoc and can be accessed by ip-adress
