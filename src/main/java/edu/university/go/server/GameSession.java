@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
- * Game session class that manages a game instanse, players, moves
+ * Game session class that manages a game instance, players, moves
  */
 class GameSession implements GameObserver {
 
@@ -43,7 +43,7 @@ class GameSession implements GameObserver {
     this.isRestored = false;
     
     if (gameService != null) {
-      this.gameEntity = gameService.createGame(boardSize, PlayerType.HUMAN, PlayerType.HUMAN);
+      this.gameEntity = gameService.createGame(boardSize, null, null);
       System.out.println("[GameSession] Game entity created: ID=" + gameEntity.getId());
     } else {
       System.out.println("[GameSession] Running without database");
@@ -119,13 +119,17 @@ class GameSession implements GameObserver {
     if (gameEntity != null && gameService != null && !isRestored) {
         if (color == Color.BLACK) {
             gameEntity.setBlackType(playerType);
+            System.out.println("[GameSession] Set BLACK player type to: " + playerType);
         } else {
             gameEntity.setWhiteType(playerType);
+            System.out.println("[GameSession] Set WHITE player type to: " + playerType);
         }
         
         gameService.updatePlayerTypes(gameEntity.getId(), 
                                       gameEntity.getBlackType(), 
                                       gameEntity.getWhiteType());
+        System.out.println("[GameSession] Updated player types in DB: Black=" + 
+                          gameEntity.getBlackType() + ", White=" + gameEntity.getWhiteType());
     }
 
     if (handler != null) {
@@ -135,15 +139,7 @@ class GameSession implements GameObserver {
 
     try {
       game.addPlayer(playerId);
-      System.out.println("[GameSession] Added player to game: " + playerId + " (" + color + ")");
-      
-      if (gameEntity != null && gameService != null && !isRestored) {
-        if (color == Color.BLACK) {
-          gameEntity.setBlackType(playerType);
-        } else {
-          gameEntity.setWhiteType(playerType);
-        }
-      }
+      System.out.println("[GameSession] Added player to game: " + playerId + " (" + color + ", " + playerType + ")");
       
       if (playerType == PlayerType.BOT && botPlayer == null) {
         botPlayer = new BotPlayer(game, color);
@@ -152,7 +148,6 @@ class GameSession implements GameObserver {
       
       if (isRestored && handler != null) {
         System.out.println("[GameSession] Sending restored state to " + playerId);
-        // Send game state before board so client updates UI in correct order
         handler.send("CAPTURED " + capturedByBlack + " " + capturedByWhite);
         handler.send("TURN " + game.getCurrentTurn());
         sendBoard(playerId);

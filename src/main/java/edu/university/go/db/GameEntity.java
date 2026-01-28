@@ -24,11 +24,11 @@ public class GameEntity {
     
     // Player types (Bot/Human)
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private PlayerType blackType;
     
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private PlayerType whiteType;
     
     @Column(nullable = false)

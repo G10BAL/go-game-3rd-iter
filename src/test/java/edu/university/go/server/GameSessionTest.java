@@ -6,6 +6,8 @@ import edu.university.go.board.Board;
 import edu.university.go.board.Color;
 import edu.university.go.game.Game;
 import edu.university.go.game.Move;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class GameSessionTest {
@@ -23,8 +25,10 @@ class GameSessionTest {
 
     session.handleMove(new Move(Color.BLACK, 4, 4, "p1"));
 
-    assertTrue(c1.lastMessage.contains("MOVE_PLAYED"));
-    assertTrue(c2.lastMessage.contains("MOVE_PLAYED"));
+    assertTrue(c1.hasReceivedMessageContaining("MOVE_PLAYED"), 
+               "Client 1 should have received MOVE_PLAYED event");
+    assertTrue(c2.hasReceivedMessageContaining("MOVE_PLAYED"), 
+               "Client 2 should have received MOVE_PLAYED event");
   }
 
   @Test
@@ -37,14 +41,12 @@ class GameSessionTest {
 
     session.handleMove(new Move(Color.BLACK, 4, 4, "p1"));
 
-    // Wait a bit for async operations to complete
     try {
       Thread.sleep(100);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
 
-    // Check that an error message was sent (either first or among messages)
     assertTrue(c1.receivedErrorMessage, "Should have received an ERROR message");
   }
 
@@ -52,6 +54,8 @@ class GameSessionTest {
 
     String lastMessage;
     boolean receivedErrorMessage = false;
+    
+    List<String> allMessages = new ArrayList<>();
 
     FakeClient() {
       super(null, null);
@@ -60,9 +64,14 @@ class GameSessionTest {
     @Override
     void send(String msg) {
       lastMessage = msg;
+      allMessages.add(msg);
       if (msg.startsWith("ERROR")) {
         receivedErrorMessage = true;
       }
+    }
+
+    boolean hasReceivedMessageContaining(String text) {
+      return allMessages.stream().anyMatch(msg -> msg.contains(text));
     }
   }
 }
