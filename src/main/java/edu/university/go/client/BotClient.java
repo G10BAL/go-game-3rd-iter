@@ -34,7 +34,11 @@ public class BotClient {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
         
+        // Identify as bot IMMEDIATELY after connection, before any server messages
         System.out.println("[BotClient] Connected to " + host + ":" + port);
+        System.out.println("[BotClient] Sending bot identification...");
+        out.println("IDENTIFY_AS_BOT");
+        out.flush();
     }
     
     public void start() {
